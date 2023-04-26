@@ -15,103 +15,110 @@ body {
 }
 
 /* ----------------------- CART PAGE ----------------------- */
-
-
-
-.products-header {
+.products-container {
   width: 100%;
-  max-width: 650px;
-  display: flex;
-  border-bottom: 4px solid lightgrey;
-  align-items: center;
+  max-width: 850px;
   margin: 0 auto;
+  
 }
 
+.products-container ion-icon {
+  cursor: pointer;
+  color: blue;
+
+}
+
+.products-header {
+  background-color: lightgrey;
+}
 
 .product-title,
 .pricer,
 .quantity,
-.totalização {
-  margin-right: 100px;
-  box-sizing: border-box;
-  padding: 0 10px;
+.totalizacao {
+  padding: 10px;
+  text-align: center;
 }
 
-.product-title {
-  width: 45%;
-  justify-content: center;
+.products td {
+  border-bottom: 1px solid lightgrey;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-.pricer {
-  width: 15%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.quantity {
-  width: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.totalização {
-  width: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-  .product {
-  width: 100%;
+.product-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid lightgrey;
-  padding: 10px 0;
-  }
+  padding: 10px;
   
-  .products-container ion-icon {
-  font-size: 25px;
-  color: blue;
-  margin-left: 10px;
-  margin-right: 10px;
-  cursor: pointer;
-  }
-  
-  .products img {
-  max-width: 10%;
-  max-height: 5%;
-  justify-content: center;
-  }
-  
-  .basketTotalContainer {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  padding: 10px 0;
-  justify-content: center;
-  }
-  
-  .basketTotalTittle {
-  width: 30%;
-  justify-content: center;
-  }
-  
-  .basketTotal {
-  width: 10%;
-  }
-  
-  .product-title,
-  .pricer,
-  .quantity,
-  .totalização {
+}
+
+.product-info img {
+  max-width: 50%;
+  max-height: 50%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10%;
+}
+
+
+.product-info .product-name {
   text-align: center;
+  font-weight: 600;
+  margin: 0 10px;
+  flex: 1;
+}
+
+
+
+.product-details {
   display: flex;
   align-items: center;
   justify-content: center;
-  }
+}
+
+.product img {
+  max-width: 50%;
+  max-height: 50%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10%;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+.total {
+  font-weight: bold;
+}
+
+.basketTotalContainer {
+  background-color: lightgrey;
+}
+
+.basketTotalTittle {
+  font-weight: 600;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.basketTotal {
+  font-weight: bold;
+}
+
+.pricer {
+  font-weight: 600;
+}
+
+.close {
+  font-size: 3.5rem;
+  align-items: center;
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+
+
+
+
 
 /* Cria o perfil de usuário acima do header final"*/
 .profile {

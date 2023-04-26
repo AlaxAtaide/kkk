@@ -188,37 +188,41 @@ let productData = {
     let productContainer = document.querySelector(".products");
     let cartCusto = localStorage.getItem('custoTotal');
   
-    if(cartItems && productContainer) {
+    if (cartItems && productContainer) {
       productContainer.innerHTML = '';
       Object.values(cartItems).map(item => {
         productContainer.innerHTML += `
-          <div class="product">
-            <ion-icon name="close-circle" class="close" data-name="${item.name}"></ion-icon>
-            <img src="./${item.tag}">
-            <span>${item.name}</span>
-            <div class="pricer">${item.price},00</div>
-            <div class="quantity">
+          <tr class="product">
+            <td class="product-info">
+              <ion-icon name="close-circle" class="close" data-name="${item.name}"></ion-icon>
+              <div class="product-details">
+                <img src="./${item.tag}">
+                <div class="product-name">${item.name}</div>
+              </div>
+            </td>
+            <td class="pricer">${item.price},00</td>
+            <td class="quantity">
               <ion-icon class="decrease" data-name="${item.name}" name="caret-back-circle"></ion-icon>
               <span>${item.inCart}</span>
               <ion-icon class="increase" data-name="${item.name}" name="caret-forward-circle"></ion-icon>
-            </div>
-            <div class="total">
+            </td>
+            <td class="total">
               R$${item.inCart * item.price},00
-            </div>
-          </div>
+            </td>
+          </tr>
         `;
       });
-
+  
       productContainer.innerHTML += `
-      <div class="basketTotalContainer">
-          <h4 class="basketTotalTittle">
-          Custo Total:
-          </h4>
-          <h4 class="basketTotal">
-           R$ ${cartCusto},00
-          </h4>
-          </div>
-    `
+        <tr class="basketTotalContainer">
+          <td class="basketTotalTittle" colspan="3">
+            Custo Total:
+          </td>
+          <td class="basketTotal">
+            R$ ${cartCusto},00
+          </td>
+        </tr>
+      `;
   
       // Seleciona todos os botões de diminuir quantidade
       let decreaseButtons = document.querySelectorAll('.decrease');
@@ -236,6 +240,7 @@ let productData = {
             localStorage.setItem('productsInCart', JSON.stringify(cartItems));
             localStorage.setItem('custoTotal', cartCost - cartItems[productName].price);
             displayCart();
+            updateCartTotal();
           }
         });
       });
@@ -254,9 +259,19 @@ let productData = {
           localStorage.setItem('productsInCart', JSON.stringify(cartItems));
           localStorage.setItem('custoTotal', cartCost + cartItems[productName].price);
           displayCart();
+          updateCartTotal();
         });
       });
   
+      // Seleciona todos os botões de remoção de produtos
+      let removeButtons = document.querySelectorAll('.close');
+
+      // Adiciona um evento de clique para cada botão
+      removeButtons.forEach(button => {
+        button.addEventListener('click', removeCartItem);
+      });
+
+
       // Atualiza o valor total do carrinho
       let cartTotal = document.querySelector('.cartTotal');
   
@@ -266,43 +281,59 @@ let productData = {
     }
   }
 
-  //Remove o ite do carrinho 
   function removeCartItem(event) {
     const productName = event.target.dataset.name;
     let cartItems = JSON.parse(localStorage.getItem("productsInCart"));
   
     if (cartItems && cartItems[productName]) {
       const product = cartItems[productName];
-      product.inCart -= 1;
-      if (product.inCart === 0) {
-        delete cartItems[productName];
-      }
+      const productQuantity = product.inCart;
+  
+      delete cartItems[productName];
+  
+      const updatedProductNumbers = parseInt(localStorage.getItem("cartNumbers")) - productQuantity;
   
       localStorage.setItem("productsInCart", JSON.stringify(cartItems));
+      localStorage.setItem("cartNumbers", Math.max(0, updatedProductNumbers));
   
-      const productNumbers = parseInt(localStorage.getItem("cartNumbers"));
-      localStorage.setItem("cartNumbers", productNumbers - 1);
-      document.querySelector(".qtdcart").textContent = productNumbers - 1;
+      if (updatedProductNumbers === 0) {
+        localStorage.removeItem("productsInCart");
+        localStorage.removeItem("cartNumbers");
+        localStorage.removeItem("custoTotal");
+      } else {
+        let updatedCartCost = 0;
   
-      let cartCost = parseInt(localStorage.getItem("custoTotal"));
-      localStorage.setItem("custoTotal", cartCost - product.price);
+        for (const item in cartItems) {
+          updatedCartCost += cartItems[item].price * cartItems[item].inCart;
+        }
   
-      event.target.parentElement.remove();
+        localStorage.setItem("custoTotal", updatedCartCost);
+      }
+  
+      event.target.parentElement.parentElement.remove();
+  
+      document.querySelector(".qtdcart").textContent = Math.max(0, updatedProductNumbers);
+  
+      displayCart(); // Atualiza a exibição do carrinho
+      updateCartTotal(); // Atualiza o valor total do carrinho
     }
   }
   
-  document.querySelector(".products").addEventListener("click", function(event) {
-    if (event.target.classList.contains("close")) {
-      removeCartItem(event);
-    }
-  });
   
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
     
 
   // Chama a função onLoadCartNumbers() para atualizar o número de itens no carrinho quando a página for carregada
   onLoadCartNumbers();
-  displayCart();
+  displayCart();// Chama a função para atualizar a exibição do carrinho
 
 
 });
