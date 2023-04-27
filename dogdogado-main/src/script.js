@@ -162,24 +162,22 @@ let productData = {
   }
 
   function custoTotal(product) {
-
-        //console.log("O preço do produto é", product.price);
- 
-        let cartCusto = localStorage.getItem('custoTotal');
-
-        console.log("Meu custoTotal é", cartCusto);
-        console.log(typeof cartCusto);
-      
+    let cartCusto = localStorage.getItem('custoTotal');
     
-      if(cartCusto != null) {
-        cartCusto = parseInt(cartCusto);
-        localStorage.setItem("custoTotal", cartCusto +
-         product.price);
-      } else {
-        localStorage.setItem("custoTotal", product.price);
-      }
-
+    if (cartCusto != null) {
+      cartCusto = parseInt(cartCusto);
+      localStorage.setItem("custoTotal", cartCusto + product.price);
+    } else {
+      localStorage.setItem("custoTotal", product.price);
+    }
+    
+    // Atualiza o elemento HTML com o valor do custo total
+    let cartTotal = document.querySelector('.basketTotal');
+    if (cartTotal) {
+      cartTotal.textContent = `R$ ${localStorage.getItem('custoTotal')},00`;
+    }
   }
+  
 
   function displayCart() {
     let cartItems = localStorage.getItem("productsInCart");
@@ -280,7 +278,7 @@ let productData = {
       }
     }
   }
-
+  
   function removeCartItem(event) {
     const productName = event.target.dataset.name;
     let cartItems = JSON.parse(localStorage.getItem("productsInCart"));
@@ -296,17 +294,18 @@ let productData = {
       localStorage.setItem("productsInCart", JSON.stringify(cartItems));
       localStorage.setItem("cartNumbers", Math.max(0, updatedProductNumbers));
   
-      if (updatedProductNumbers === 0) {
+      let updatedCartCost = 0;
+  
+      for (const item in cartItems) {
+        updatedCartCost += cartItems[item].price * cartItems[item].inCart;
+      }
+  
+      if (Object.keys(cartItems).length === 0) {
         localStorage.removeItem("productsInCart");
         localStorage.removeItem("cartNumbers");
         localStorage.removeItem("custoTotal");
+        document.querySelector('.basketTotalContainer').textContent = ''; // Remove o valor do custo total do elemento HTML
       } else {
-        let updatedCartCost = 0;
-  
-        for (const item in cartItems) {
-          updatedCartCost += cartItems[item].price * cartItems[item].inCart;
-        }
-  
         localStorage.setItem("custoTotal", updatedCartCost);
       }
   
@@ -315,21 +314,14 @@ let productData = {
       document.querySelector(".qtdcart").textContent = Math.max(0, updatedProductNumbers);
   
       displayCart(); // Atualiza a exibição do carrinho
-      updateCartTotal(); // Atualiza o valor total do carrinho
+  
+      // Atualiza o valor total do carrinho após a remoção do item
+      updateCartTotal();
     }
   }
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    
+
 
   // Chama a função onLoadCartNumbers() para atualizar o número de itens no carrinho quando a página for carregada
   onLoadCartNumbers();

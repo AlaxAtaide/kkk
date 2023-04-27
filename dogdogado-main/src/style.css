@@ -88,10 +88,13 @@ body {
 
 .total {
   font-weight: bold;
+  width: 10%;
+  text-align: center;
 }
 
 .basketTotalContainer {
   background-color: lightgrey;
+  text-align: center;
 }
 
 .basketTotalTittle {
